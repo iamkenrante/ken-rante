@@ -1,6 +1,6 @@
 import base64
 
-with open('Somesh_Resume.pdf', 'rb') as f:
+with open('Resume_Ken_Rante', 'rb') as f:
     pdf_bytes = f.read()
 
 b64_str = base64.b64encode(pdf_bytes).decode('utf-8')

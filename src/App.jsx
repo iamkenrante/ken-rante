@@ -172,6 +172,7 @@ function App() {
 
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const roleRef = useRef(null);
 
   const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
@@ -289,6 +290,16 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
+  // Custom cursor tracking
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const handleFormChange = (event) => {
     const { name, value } = event.target;
 
@@ -366,8 +377,16 @@ function App() {
   );
 
   return (
-    <div className="app-shell">
-      <AuthStatusBar />
+    <>
+      <div
+        className="custom-cursor"
+        style={{
+          left: `${cursorPos.x}px`,
+          top: `${cursorPos.y}px`,
+        }}
+      />
+      <div className="app-shell">
+        <AuthStatusBar />
       
       <header className="site-header">
         <button
@@ -797,6 +816,7 @@ function App() {
         <span className="footer-brand">KR</span>
       </footer>
     </div>
+    </>
   );
 }
 

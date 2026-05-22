@@ -1140,3 +1140,41 @@ textarea {
     padding: 2rem 1.5rem;
   }
 }
+
+/* Custom Animated Cursor */
+* {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  box-shadow: 0 0 12px rgba(110, 255, 203, 0.4);
+  transition: width 0.1s ease, height 0.1s ease, border-color 0.1s ease;
+}
+
+.custom-cursor::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button:hover ~ .custom-cursor,
+a:hover ~ .custom-cursor,
+input:hover ~ .custom-cursor,
+textarea:hover ~ .custom-cursor {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 16px rgba(110, 158, 255, 0.5);
+}
