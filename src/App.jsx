@@ -172,7 +172,8 @@ function App() {
 
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const cursorDotRef = useRef(null);
+  const cursorRingRef = useRef(null);
   const roleRef = useRef(null);
 
   const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
@@ -290,14 +291,34 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // Custom cursor tracking
+  // Custom cursor tracking and hover state
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+    const cursorDot = cursorDotRef.current;
+    const cursorRing = cursorRingRef.current;
+
+    if (!cursorDot || !cursorRing) return;
+
+    const handlePointerMove = (event) => {
+      const x = event.clientX;
+      const y = event.clientY;
+
+      cursorDot.style.left = `${x}px`;
+      cursorDot.style.top = `${y}px`;
+      cursorRing.style.left = `${x}px`;
+      cursorRing.style.top = `${y}px`;
+
+      const interactive = event.target.closest(
+        'a, button, input, textarea, select, [role="button"], .badge-link, .btn-primary, .btn-outline, .download-cv-btn'
+      );
+      document.body.classList.toggle('cursor-hover', !!interactive);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('pointermove', handlePointerMove);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.body.classList.remove('cursor-hover');
+    };
   }, []);
 
   const handleFormChange = (event) => {
@@ -378,13 +399,8 @@ function App() {
 
   return (
     <>
-      <div
-        className="custom-cursor"
-        style={{
-          left: `${cursorPos.x}px`,
-          top: `${cursorPos.y}px`,
-        }}
-      />
+      <div id="cursor-ring" ref={cursorRingRef} style={{ left: '0px', top: '0px' }} />
+      <div id="cursor-dot" ref={cursorDotRef} style={{ left: '0px', top: '0px' }} />
       <div className="app-shell">
         <AuthStatusBar />
       
@@ -515,17 +531,10 @@ function App() {
             </div>
 
             <div className="about-copy">
-              <p>
-                Hey! I'm <strong>Ken Redel Rante</strong> — Founder of KRAJN IT Consulting Services and a seasoned auditor with
-                extensive experience in auditing, compliance, operational improvement, and business systems development. 
-				I specialize in internal controls auditing, process improvement, Beyond auditing, automation reporting, 
-				and IT consulting solutions that help organizations improve efficiency and compliance.
-				I am a <strong>professional IT projects lead and a full stack developer</strong>,
-				specializing in designing, deploying, and maintaining enterprise-grade solutions.
-				My expertise spans modern web frameworks, database optimization, cloud 
-				integration, and scalable system architecture — enabling businesses to 
-				achieve both technical reliability and operational transparency.
-				</p>
+
+			<p>
+			  Hey! I'm <strong>Ken Redel Rante</strong> — Founder of <strong>KRAJN IT Consulting Services</strong>, a seasoned auditor with extensive experience in auditing, compliance, operational improvement, and business systems development. I specialize in internal controls auditing, process improvement, automation reporting, and IT consulting solutions that enhance organizational efficiency and strengthen compliance frameworks. Beyond auditing, I am a <strong>professional IT projects lead and full stack developer</strong>, with expertise in designing, deploying, and maintaining enterprise-grade solutions. My technical proficiency spans modern web frameworks, database optimization, cloud integration, and scalable system architecture — enabling businesses to achieve both technical reliability and operational transparency.
+			</p>
 
               <p>
                 I'm open for consulting, auditing projects, system

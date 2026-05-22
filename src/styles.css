@@ -52,46 +52,6 @@ body::before {
   opacity: 0.38;
 }
 
-#cursor-dot,
-#cursor-ring {
-  position: fixed;
-  left: 0;
-  top: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-#cursor-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
-}
-
-#cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--accent);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.7;
-  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-}
-
-body.cursor-hover #cursor-dot {
-  width: 16px;
-  height: 16px;
-  background: var(--accent-3);
-}
-
-body.cursor-hover #cursor-ring {
-  width: 64px;
-  height: 64px;
-  border-color: var(--accent-3);
-  opacity: 0.45;
-}
 
 .site-header {
   position: fixed;
@@ -1142,39 +1102,55 @@ textarea {
 }
 
 /* Custom Animated Cursor */
-* {
+body,
+a,
+button,
+input,
+textarea,
+select,
+[role="button"] {
   cursor: none;
 }
 
-.custom-cursor {
+#cursor-dot {
   position: fixed;
-  width: 32px;
-  height: 32px;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
+  top: 0px;
+  left: 0px;
   z-index: 9999;
-  box-shadow: 0 0 12px rgba(110, 255, 203, 0.4);
-  transition: width 0.1s ease, height 0.1s ease, border-color 0.1s ease;
-}
-
-.custom-cursor::before {
-  content: '';
-  position: absolute;
-  width: 4px;
-  height: 4px;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
   background: var(--accent);
   border-radius: 50%;
-  top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background 0.3s;
+  mix-blend-mode: difference;
 }
 
-button:hover ~ .custom-cursor,
-a:hover ~ .custom-cursor,
-input:hover ~ .custom-cursor,
-textarea:hover ~ .custom-cursor {
+#cursor-ring {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 9998;
+  pointer-events: none;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  opacity: 0.7;
+}
+
+body.cursor-hover #cursor-dot {
+  width: 14px;
+  height: 14px;
+  background: var(--accent-2);
+}
+
+body.cursor-hover #cursor-ring {
+  width: 60px;
+  height: 60px;
   border-color: var(--accent-2);
-  box-shadow: 0 0 16px rgba(110, 158, 255, 0.5);
+  opacity: 0.5;
 }
